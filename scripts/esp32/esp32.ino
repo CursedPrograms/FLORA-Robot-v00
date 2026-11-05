@@ -327,6 +327,10 @@ void routes() {
   web.on("/", []() { web.send_P(200, "text/html", WEB_INDEX); });
   web.on("/style.css", []() { web.send_P(200, "text/css", WEB_STYLE); });
   web.on("/app.js", []() { web.send_P(200, "application/javascript", WEB_APP); });
+  web.on("/avatar.jpg", []() {
+    web.sendHeader("Cache-Control", "max-age=86400");
+    web.send_P(200, "image/jpeg", (const char*)WEB_AVATAR, WEB_AVATAR_LEN);
+  });
   web.on("/ping", []() { web.send(200, "text/plain", "FLORA alive"); });
   web.on("/status", []() { sendJson(200, statusJson()); });
   web.on("/sensors", []() { sendJson(200, statusJson()); });

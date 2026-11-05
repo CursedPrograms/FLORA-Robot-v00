@@ -7,8 +7,12 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--sans); }
 header { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--border); }
-.brand { font: 700 22px var(--mono); letter-spacing: 4px; color: var(--leaf); }
+.brand { font: 700 22px var(--mono); letter-spacing: 4px; color: var(--leaf); display: flex; align-items: center; gap: 10px; }
 .where { color: var(--sub); font-size: 14px; }
+.brand .face { width: 64px; height: 64px; border-radius: 50%; image-rendering: pixelated; }
+.speech { display: flex; align-items: center; gap: 16px; margin: 4px 0 16px; }
+.speech .portrait { width: 96px; height: 96px; border-radius: 50%; border: 2px solid var(--leaf); image-rendering: pixelated; flex: none; }
+.speech .says { margin: 0; }
 main { max-width: 900px; margin: 0 auto; padding: 18px 20px 40px; }
 h2 { font: 600 13px var(--mono); letter-spacing: 2px; text-transform: uppercase; color: var(--sub); margin: 26px 0 10px; }
 .muted { color: var(--sub); font-size: 14px; }

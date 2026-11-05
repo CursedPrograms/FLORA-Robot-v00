@@ -1,6 +1,6 @@
 """make_web.py - FLORA's own web page into her firmware.
 
-Her page lives as plain files in scripts/esp32/web/ (index.html, style.css, app.js: edit those).
+Her page lives as plain files in scripts/esp32/web/ (index.html, style.css, app.js and avatar.jpg: edit those).
 This writes them into scripts/esp32/web_page.h as strings her web server sends. flash.ps1 runs it
 before every compile, so the page on the board is always the files in web/.
 
@@ -19,6 +19,10 @@ for name, fname in FILES:
     text = (web / fname).read_text(encoding="utf-8")
     assert ')=====' not in text, f"{fname} contains the raw-string end marker"
     parts.append(f"const char {name}[] PROGMEM = R\"=====({text})=====\";\n\n")
+avatar = (web / "avatar.jpg").read_bytes()          # her face, served as /avatar.jpg
+rows = [", ".join(str(b) for b in avatar[i:i + 32]) for i in range(0, len(avatar), 32)]
+parts.append("const uint8_t WEB_AVATAR[] PROGMEM = {\n  " + ",\n  ".join(rows) + "\n};\n")
+parts.append(f"const size_t WEB_AVATAR_LEN = {len(avatar)};\n")
 new = "".join(parts)
 if not out.exists() or out.read_text(encoding="utf-8") != new:   # untouched: no rebuild
     out.write_text(new, encoding="utf-8", newline="\n")
