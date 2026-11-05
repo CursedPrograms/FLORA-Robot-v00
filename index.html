@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLORA — Field Leaf Observer &amp; Root Assistant</title>
+<meta name="description" content="FLORA is the DREAM Robotics gardener: an ESP32 that feels the soil, the air and the light around a plant, and waters it when it needs it, unless the weather station says rain is coming.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="FLORA — Field Leaf Observer &amp; Root Assistant">
+<meta property="og:description" content="The fleet's gardener: soil moisture, temperature, humidity, light, UV and a pump.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="images/flora_avatar.png">
+<link rel="icon" href="site/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="site/apple-touch-icon.png">
+<link rel="stylesheet" href="site/style.css">
+<script src="site/site.js" defer></script>
+</head>
+<body>
+
+<nav aria-label="Primary">
+  <div class="wrap">
+    <a class="brand" href="#top">FLORA</a>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#watering">Watering</a></li>
+      <li><a href="#wiring">Wiring</a></li>
+      <li><a href="#apps">Apps</a></li>
+      <li><a href="https://github.com/CursedPrograms/FLORA-Robot-v00">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <h1>FLORA</h1>
+    <p class="tagline">Field Leaf Observer &amp; Root Assistant</p>
+    <p class="lede">The fleet's gardener. FLORA feels the soil, the air and the light around a plant, and waters it when it needs it, unless AURA, the weather station, says rain is on the way.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/CursedPrograms/FLORA-Robot-v00">View on GitHub</a>
+      <a class="btn" href="#wiring">Wiring</a>
+      <a class="btn" href="https://ko-fi.com/cursedentertainment">Support on Ko-fi</a>
+    </div>
+    <div class="tags" aria-label="Technologies">
+      <span class="tag">ESP32</span>
+      <span class="tag">C++</span>
+      <span class="tag">Kotlin</span>
+      <span class="tag">ESP-NOW</span>
+      <span class="tag">Bluetooth</span>
+      <span class="tag">MIT License</span>
+    </div>
+
+    <figure class="avatar">
+      <img src="images/flora_avatar.png" alt="FLORA: a sunflower with a drop of water" width="768" height="768">
+      <figcaption>FLORA &middot; avatar</figcaption>
+    </figure>
+  </div>
+</header>
+
+<main>
+<section id="overview">
+  <div class="wrap">
+    <h2>Overview</h2>
+    <h3 class="title">Soil, air, light, water</h3>
+    <div class="grid cols-3">
+      <div class="card"><span class="k">Soil</span><h4>How thirsty</h4><p>A soil fork, calibrated from her page, read once a minute and powered only while it reads, so it doesn't corrode away.</p></div>
+      <div class="card"><span class="k">Air</span><h4>Temperature and humidity</h4><p>An AHT10, the same as NORA and MILA. AURA plots it with the rest of the fleet, in FLORA's green.</p></div>
+      <div class="card"><span class="k">Light</span><h4>Sun and UV</h4><p>A photoresistor, like MILA's: brightness and the hours of good light today. A UV module, like KIDA-01's: the UV index.</p></div>
+      <div class="card"><span class="k">Water</span><h4>A pump, carefully</h4><p>She waters when the soil is dry: never longer than 10 seconds, never more than 4 times a day, not in the midday heat.</p></div>
+      <div class="card"><span class="k">Weather</span><h4>Asks AURA first</h4><p>If AURA, the weather station, thinks rain is coming, she lets the sky do it.</p></div>
+      <div class="card"><span class="k">Fleet</span><h4>One of the robots</h4><p>Joins the fleet's network, beacons over ESP-NOW and Bluetooth LE, talks in Brainfuck on her buzzer, and RIFT can ask her to water.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="watering">
+  <div class="wrap">
+    <h2>Watering</h2>
+    <h3 class="title">Only when it's safe and needed</h3>
+    <p>Automatic watering starts <strong>off</strong>: calibrate the fork, test the pump, then turn it on. She waters only when the soil is drier than your setting, and never:</p>
+    <ul class="muted">
+      <li>for more than 10 seconds (and a hard 15-second cut-off whatever happens),</li>
+      <li>within 30 minutes of the last watering, or more than 4 times a day,</li>
+      <li>in the midday heat, unless the soil is critically dry,</li>
+      <li>when AURA thinks rain is coming, or rain is forecast within 3 hours,</li>
+      <li>when the fork reads nonsense.</li>
+    </ul>
+    <p class="muted">The rules are plain C++, tested on the PC (<code>tests/test_rules.cpp</code>), and every number is a setting on her page.</p>
+  </div>
+</section>
+
+<section id="wiring">
+  <div class="wrap">
+    <h2>Wiring</h2>
+    <h3 class="title">An ESP32 DevKit</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Part</th><th>Pin</th></tr></thead>
+        <tbody>
+          <tr><td>Soil fork AO / VCC</td><td>GPIO34 / GPIO25 (powered only while reading)</td></tr>
+          <tr><td>AHT10 SDA / SCL</td><td>GPIO21 / GPIO22</td></tr>
+          <tr><td>Photoresistor module AO</td><td>GPIO35</td></tr>
+          <tr><td>UV module OUT</td><td>GPIO32</td></tr>
+          <tr><td>Relay IN (pump)</td><td>GPIO26, active LOW (the pump on its own 5 V supply)</td></tr>
+          <tr><td>Buzzer / LED</td><td>GPIO27 / GPIO2</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="apps">
+  <div class="wrap">
+    <h2>Apps</h2>
+    <h3 class="title">Her page, anywhere</h3>
+    <div class="grid cols-2">
+      <div class="card">
+        <span class="k">Windows</span>
+        <h4>flora.exe</h4>
+        <p>Her page in a native window. FIND gets her address from the fleet list.</p>
+        <p><a class="btn primary" href="https://github.com/CursedPrograms/FLORA-Robot-v00/raw/main/builds/flora.exe">Download flora.exe</a></p>
+      </div>
+      <div class="card">
+        <span class="k">Android</span>
+        <h4>The FLORA app</h4>
+        <p>Her page full screen on your phone.</p>
+        <p><a class="btn primary" href="https://github.com/CursedPrograms/FLORA-Robot-v00/raw/main/Android%20App/apk/FLORA-debug-2026-11-05.apk">Download the APK</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer id="site-footer">&copy; Cursed Entertainment 2026</footer>
+<script src="https://cursedprograms.github.io/RIFT/site/footer.js"></script>
+
+<!-- DREAM-ECOSYSTEM:START -->
+<section class="eco">
+  <div class="eco-title">The DREAM Robotics ecosystem</div>
+  <div><strong>Minds</strong> — <a href="https://cursedprograms.github.io/DREAM/">DREAM</a> companion · <a href="https://cursedprograms.github.io/TINA/">TINA</a> engineer · <a href="https://cursedprograms.github.io/NINA/">NINA</a> caretaker · <a href="https://cursedprograms.github.io/RIFT/">RIFT</a> fleet hub · <a href="https://github.com/CursedPrograms/LYCEA">LYCEA</a> training school</div>
+  <div><strong>Robots</strong> — <a href="https://cursedprograms.github.io/NORA-Robot-v00/">NORA</a> · <a href="https://cursedprograms.github.io/MILA-Robot-v00/">MILA</a> · <a href="https://cursedprograms.github.io/WHIP-Robot-v00/">WHIP</a> · <a href="https://cursedprograms.github.io/KIDA-Robot-v00/">KIDA-00</a> · <a href="https://cursedprograms.github.io/KIDA-Robot-v01/">KIDA-01</a> · <a href="https://cursedprograms.github.io/IDA-Robot-v00/">IDA</a> · <a href="https://cursedprograms.github.io/ARM-Robot-v01/">ARM</a> · <a href="https://cursedprograms.github.io/NIKA-Robot-v00/">NIKA</a> · <a href="https://cursedprograms.github.io/ARIA-Robot-v00/">ARIA</a> · <a href="https://cursedprograms.github.io/AURA/">AURA</a> weather · <a href="https://cursedprograms.github.io/FLORA-Robot-v00/">FLORA</a> gardener</div>
+  <div><strong>Remotes</strong> — <a href="https://cursedprograms.github.io/RITA/">RITA</a> handheld remote</div>
+</section>
+<!-- DREAM-ECOSYSTEM:END -->
+</body>
+</html>

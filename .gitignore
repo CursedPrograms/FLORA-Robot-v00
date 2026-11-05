@@ -1,0 +1,6 @@
+build/
+*.part
+scripts/esp32/secrets.h
+# the exe and the APKs are kept
+!builds/
+!builds/*.exe
